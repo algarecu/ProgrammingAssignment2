@@ -2,17 +2,32 @@
 ## Pair of functions to cache the inverse of a matrix
 
 ## Write a short comment describing this function
-makeCacheMatrix <- function(x = matrix()) {
-    m <- NULL
+makeCacheMatrix <- function( x = matrix() ) {
     
+    # Check if input is matrix
+    if (!is.matrix(x)){
+        stop("Please enter a matrix")
+    }
+    
+    # Initialize inverse matrix
+    local.inverse <- NULL
+    
+    # Store set value of matrices
     set <- function(y) {
         x <<- y
-        m <<- NULL
+        local.inverse <<- NULL
     }
+    
+    # Get stored matrix
     get <- function() x
     
-    setinverse <- function(inverse) m <<- solve(x)
-    getinverse <- function() m
+    # Set/Get inverse of matrix
+    setinverse <- function(inverse) {
+        local.inverse <<- inverse
+    }
+    getinverse <- function() {
+        local.inverse
+    }
     
     list(set = set, get = get,
          setinverse = setinverse,
@@ -20,16 +35,19 @@ makeCacheMatrix <- function(x = matrix()) {
 }
 
 ## Cache for matrix inverse, if exists reuse it, else compute it.
-cacheSolve <- function(x, ...) {
-    m <- x$getinverse()
-    if(!is.null(m)) {
-        message("getting cached inverse matrix")
+cacheSolve <- function(cached, ...) {
+    
+    inverse <- cached$getinverse()
+    
+    # If cached, display message
+    if(!is.null(inverse)) {
+        message("getting cached inverse matrix...")
+    } else{
         ## Return a matrix that is the inverse of 'x'
-        return(m)
+        data <- cached$get()
+        inverse <- solve(data, ...)
+        cached$setinverse(inverse)
     }
-    data <- x$get()
-    m <- inverse(data, ...)
-    x$setinverse(m)
-    ## Return a matrix that is the inverse of 'x'
-    m
+    # Finally return current value of the inverse
+    inverse
 }
