@@ -1,7 +1,7 @@
 ## Álvaro García Recuero
 ## Pair of functions to cache the inverse of a matrix
 
-## Write a short comment describing this function
+## Function creates a special "matrix" object that can cache its inverse.
 makeCacheMatrix <- function( x = matrix() ) {
     
     # Check if input is matrix
